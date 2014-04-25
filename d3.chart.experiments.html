@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8" content="50"/>
+<link href="lib/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="chart-styles.css" rel="stylesheet" type="text/css">
+<head>
+	<meta charset="UTF-8">
+	<title>Reuseability</title>
+</head>
+<body>
+<div class="charts">
+	<div id="chart"></div>
+	<div id="chart2"></div>
+	<div id="chart3"></div>
+	<div id="chart4"></div>
+	<div id="chart5"></div>
+	<div id="grouped-bar-chart"></div>
+</div>
+<script src="lib/d3.v3.js"></script>
+<script src="lib/d3.chart.min.js"></script>
+<script src="lib/miso.ds.deps.ie.0.4.1.js"></script>
+<script src="lib/jquery.js"></script>
+<script src="lib/bootstrap-tooltip.js"></script>
+<script src="lib/bootstrap-popover.js"></script>
+<!-- <script src="lib/d3.chart.base.js"></script> -->
+<script src="lib/MAPCviz.js"></script>
+<script>
+
+var chart
+  , config = { 
+      path: 'data/edattain_by_race_puma.csv',
+      data: ['% Adults with an associate or bachelor degree']  
+    , series: 'Puma Type'
+    , errorflag: ', margin of error'
+    , where: {
+        column: 'year',
+        value: '2007-11'
+      }
+    , groupBy: {
+
+      }
+    , countBy: {
+
+      }
+    }
+
+var ds = new Miso.Dataset({
+  url : config.path,
+  delimiter : ',',
+  columns: [{ name: 'Year', type: 'string' }]
+});
+
+ds.fetch({
+  success : function() {
+  // we need to structure our data, from the dataset, into something d3 understands.
+
+	  var cut = ds.where({ columns: config.data, rows: function(row) { return row[config.where.column] == config.where.value }})
+	  var output = [];
+
+	  (this.countBy('Puma Type')).each(function(unique, index) {
+	    console.log(unique['Puma Type'])
+	    var values = [];
+	    var dynamicCut = ds.where({ columns: ['Puma Type', 'Year', '% Adults with an associate or bachelor degree', '% Adults with an associate or bachelor degree, margin of error']
+	        , rows: function(row) { return row['Puma Type'] ==  unique['Puma Type']}  })
+
+	    dynamicCut.each(function (row, rowIndex) {
+	      values.push({ name: row['Year'], value: row['% Adults with an associate or bachelor degree'], error: row['% Adults with an associate or bachelor degree, margin of error'] })
+	    })
+	    output.push({ series: unique['Puma Type'], values: values})
+	  });
+
+	  console.log("new output: ", output)
+
+  },
+  error : function() {
+    console.log("Failure loading data")
+  }
+});
+
+var testDataTwoDimension = [
+  {name: 'A', value: 4},
+  {name: 'B', value: -36},
+  {name: 'C', value: 19},
+  {name: 'D', value: -2},
+  {name: 'E', value: 6},
+];
+
+
+var testDataTwoDimension3 = [
+  {name: 'A', value: 4},
+  {name: 'B', value: -36},
+  {name: 'C', value: 60},
+  {name: 'D', value: -2},
+  {name: 'E', value: 70},
+];
+
+// create an instance of the chart on a d3 selection
+var chart = d3.select('#chart')
+  .append("svg")
+  .chart("BarChart");
+
+chart.draw(testDataTwoDimension);
+
+var chart = d3.select('#chart2')
+  .append("svg")
+  .chart("BarChart");
+
+// render it with some data
+chart.draw(testDataTwoDimension);
+
+var chart = d3.select('#chart3')
+  .append("svg")
+  .chart("BarChart");
+
+chart.draw(testDataTwoDimension);
+
+var chart = d3.select('#chart4')
+  .append("svg")
+  .chart("BarChart");
+
+// render it with some data
+chart.draw(testDataTwoDimension);
+
+var chart = d3.select('#chart5')
+  .append("svg")
+  .chart("BarChart");
+
+// render it with some data
+chart.draw(testDataTwoDimension3);
+
+var groupedBarData = [
+  {category: 'samuel bartholomew jonathan franzen esther grabba the fourth', val1: 10, val2: 13, val3: 15, val4: 2, val5:40, val6: 20 },
+  {category: 'jenna', val1: 20, val2: 11, val3: 5,val4: 12, val5:40, val6: 20  },
+  {category: 'peter', val1: 11, val2: 13, val3: 9, val4: 12, val5:40, val6: 20 },
+];
+
+var groupedBarChart = d3.select("#grouped-bar-chart")
+  .append("svg")
+  .chart("GroupedBarChart");
+
+groupedBarChart.draw(groupedBarData);
+
+</script>
+	
+</body>
+</html>
