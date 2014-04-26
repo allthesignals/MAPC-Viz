@@ -9,12 +9,10 @@
 </head>
 <body>
 <div class="charts">
-	<div id="chart"></div>
-	<div id="chart2"></div>
-	<div id="chart3"></div>
 	<div id="chart4"></div>
 	<div id="chart5"></div>
 	<div id="grouped-bar-chart"></div>
+  <div id="grouped-bar-chart-real-data"></div>
 </div>
 <script src="lib/d3.v3.js"></script>
 <script src="lib/d3.chart.min.js"></script>
@@ -69,8 +67,13 @@ ds.fetch({
 	    output.push({ series: unique['Puma Type'], values: values})
 	  });
 
-	  console.log("new output: ", output)
+	  console.log("new output: ", output);
 
+    var groupedBarChart = d3.select("#grouped-bar-chart-real-data")
+      .append("svg")
+      .chart("GroupedBarChart");
+
+    groupedBarChart.draw(output);
   },
   error : function() {
     console.log("Failure loading data")
@@ -94,26 +97,6 @@ var testDataTwoDimension3 = [
   {name: 'E', value: 70},
 ];
 
-// create an instance of the chart on a d3 selection
-var chart = d3.select('#chart')
-  .append("svg")
-  .chart("BarChart");
-
-chart.draw(testDataTwoDimension);
-
-var chart = d3.select('#chart2')
-  .append("svg")
-  .chart("BarChart");
-
-// render it with some data
-chart.draw(testDataTwoDimension);
-
-var chart = d3.select('#chart3')
-  .append("svg")
-  .chart("BarChart");
-
-chart.draw(testDataTwoDimension);
-
 var chart = d3.select('#chart4')
   .append("svg")
   .chart("BarChart");
@@ -134,11 +117,7 @@ var groupedBarData = [
   {category: 'peter', val1: 11, val2: 13, val3: 9, val4: 12, val5:40, val6: 20 },
 ];
 
-var groupedBarChart = d3.select("#grouped-bar-chart")
-  .append("svg")
-  .chart("GroupedBarChart");
 
-groupedBarChart.draw(groupedBarData);
 
 </script>
 	
