@@ -50,8 +50,6 @@ var ds = new Miso.Dataset({
 
 ds.fetch({
   success : function() {
-  // we need to structure our data, from the dataset, into something d3 understands.
-
 	  var cut = ds.where({ columns: config.data, rows: function(row) { return row[config.where.column] == config.where.value }})
 	  var output = [];
 
@@ -87,7 +85,6 @@ var testDataTwoDimension = [
   {name: 'D', value: -2},
   {name: 'E', value: 6},
 ];
-
 
 var testDataTwoDimension3 = [
   {name: 'A', value: 4},
