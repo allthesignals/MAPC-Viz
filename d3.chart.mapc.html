@@ -11,8 +11,8 @@
 <div class="charts">
 	<div id="chart4"></div>
 	<div id="chart5"></div>
-	<div id="grouped-bar-chart"></div>
   <div id="grouped-bar-chart-real-data"></div>
+  <div id="grouped-bar-chart-real-data2"></div>
 </div>
 <script src="lib/d3.v3.js"></script>
 <script src="lib/d3.chart.min.js"></script>
@@ -24,8 +24,7 @@
 <script src="lib/MAPCviz.js"></script>
 <script>
 
-var chart
-  , config = { 
+var config = { 
       path: 'data/edattain_by_race_puma.csv',
       data: ['% Adults with an associate or bachelor degree']  
     , series: 'Puma Type'
@@ -72,6 +71,14 @@ ds.fetch({
       .chart("GroupedBarChart");
 
     groupedBarChart.draw(output);
+
+
+    var groupedBarChart = d3.select("#grouped-bar-chart-real-data2")
+      .append("svg")
+      .chart("GroupedBarChart");
+
+    groupedBarChart.draw(output);
+
   },
   error : function() {
     console.log("Failure loading data")
@@ -108,11 +115,6 @@ var chart = d3.select('#chart5')
 // render it with some data
 chart.draw(testDataTwoDimension3);
 
-var groupedBarData = [
-  {category: 'samuel bartholomew jonathan franzen esther grabba the fourth', val1: 10, val2: 13, val3: 15, val4: 2, val5:40, val6: 20 },
-  {category: 'jenna', val1: 20, val2: 11, val3: 5,val4: 12, val5:40, val6: 20  },
-  {category: 'peter', val1: 11, val2: 13, val3: 9, val4: 12, val5:40, val6: 20 },
-];
 
 
 

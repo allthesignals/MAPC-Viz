@@ -1,6 +1,10 @@
 # _MAPC.Viz_
 
-Description: a series of reusable charts tailored to the needs of the Metropolitan Area Planning Council.
+Easy to use. Easy to modify. 
+
+A series of reusable charts tailored to the needs of the Metropolitan Area Planning Council.
+
+D3 + D3.chart. 
 
 Embraces the principles of reusability, as described by Mike Bostock: http://bost.ocks.org/mike/chart/
 
