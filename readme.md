@@ -21,3 +21,5 @@ Many thanks to Sam Selikoff's excellent D3.Chart article: http://www.samselikoff
 3. Accessible d3.format options
 4. Line chart?
 5. Extend multibarchart from barchart?
+6. JSON request utility method
+7. Pull tiles from MAPC tile server

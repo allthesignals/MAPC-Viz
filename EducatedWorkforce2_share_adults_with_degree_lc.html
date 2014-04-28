@@ -56,7 +56,7 @@ var yAxis = d3.svg.axis()
     .orient("left");
 
 var line = d3.svg.line()
-    .x(function(d) { return x(d.year); })
+    .x(function(d) { console.log(d); return x(d.year); })
     .y(function(d) { return y(d.value); });
 
 var svg = d3.select("#chart").append("svg")
@@ -164,7 +164,7 @@ ds.fetch({
 
   city.selectAll("circle")
       .data(function(d) { return d.values;})
-      .enter().append("svg:circle")
+    .enter().append("svg:circle")
       .attr("cx", function(d) { return x(d.year) })
       .attr("cy", function(d) { return y(d.value) })
       .attr("title", function(d) { return (d.year).getFullYear() })

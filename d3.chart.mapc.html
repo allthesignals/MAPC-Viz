@@ -9,8 +9,10 @@
 </head>
 <body>
 <div class="charts">
+  <div id="line-graph"></div>
 	<div id="chart4"></div>
 	<div id="chart5"></div>
+  <div id="chart3"></div>
   <div id="grouped-bar-chart-real-data"></div>
   <div id="grouped-bar-chart-real-data2"></div>
 </div>
@@ -24,36 +26,37 @@
 <script src="lib/MAPCviz.js"></script>
 <script>
 
-var config = { 
-      path: 'data/edattain_by_race_puma.csv',
-      data: ['% Adults with an associate or bachelor degree']  
-    , series: 'Puma Type'
-    , errorflag: ', margin of error'
-    , where: {
-        column: 'year',
-        value: '2007-11'
-      }
-    , groupBy: {
 
-      }
-    , countBy: {
-
-      }
-    }
 
 var ds = new Miso.Dataset({
-  url : config.path,
+  url : 'data/edattain_by_race_puma.csv',
   delimiter : ',',
   columns: [{ name: 'Year', type: 'string' }]
 });
 
 ds.fetch({
   success : function() {
+    var config = { 
+          path: 'data/edattain_by_race_puma.csv',
+          data: ['% Adults with an associate or bachelor degree']  
+        , series: 'Puma Type'
+        , errorflag: ', margin of error'
+        , where: {
+            column: 'year',
+            value: '2007-11'
+          }
+        , groupBy: {
+
+          }
+        , countBy: {
+
+          }
+        }
+
 	  var cut = ds.where({ columns: config.data, rows: function(row) { return row[config.where.column] == config.where.value }})
 	  var output = [];
 
 	  (this.countBy('Puma Type')).each(function(unique, index) {
-	    console.log(unique['Puma Type'])
 	    var values = [];
 	    var dynamicCut = ds.where({ columns: ['Puma Type', 'Year', '% Adults with an associate or bachelor degree', '% Adults with an associate or bachelor degree, margin of error']
 	        , rows: function(row) { return row['Puma Type'] ==  unique['Puma Type']}  })
@@ -63,8 +66,6 @@ ds.fetch({
 	    })
 	    output.push({ series: unique['Puma Type'], values: values})
 	  });
-
-	  console.log("new output: ", output);
 
     var groupedBarChart = d3.select("#grouped-bar-chart-real-data")
       .append("svg")
@@ -80,6 +81,57 @@ ds.fetch({
     groupedBarChart.draw(output);
 
   },
+  error : function() {
+    console.log("Failure loading data")
+  }
+});
+
+
+
+var lineChart = new Miso.Dataset({
+  url : 'data/edattain_by_msa.csv',
+  delimiter : ','
+});
+
+lineChart.fetch({
+  success : function() {
+
+  var chart, 
+      config = { 
+        path: 'data/edattain_by_msa.csv',
+        data: ['Associate Degree or Higher'], 
+        series: 'MSA Name', 
+        errorflag: '', 
+        where: {
+          column: '',
+          value: ''
+        }
+      }
+
+  // we need to structure our data, from the dataset, into something d3 understanlineChart.
+  var output = []; // empty box
+  var parseDate = d3.time.format("%Y").parse;
+  var cut = lineChart.where({ rows: function(row) { return row['Rank By Population'] <= 10 }});
+
+  (cut.countBy('MSA Name')).each(function(unique, index) {
+    var values = []
+    var dynamicCut = lineChart.where({ columns: ['MSA Name', 'Associate Degree or Higher', 'Year'], rows: function(row) { return row['MSA Name'] == unique['MSA Name'] }})
+
+    dynamicCut.each(function(row, rowIndex) {
+      values.push({ year: parseDate(row['Year'].toString()), value: row['Associate Degree or Higher']})
+    });
+      output.push({series: unique['MSA Name'], values: values});
+    
+  });
+
+  var chart = d3.select("#line-graph")
+    .append("svg")
+    .chart("LineChart")
+
+  chart.draw(output);
+
+  },
+
   error : function() {
     console.log("Failure loading data")
   }
@@ -101,12 +153,38 @@ var testDataTwoDimension3 = [
   {name: 'E', value: 70},
 ];
 
+var linechart = [
+  {year: '2005', value: 4},
+  {year: '2006', value: -36},
+  {year: '2007', value: 60},
+  {year: '2008', value: -2},
+  {year: '2009', value: 70},
+];
+
 var chart = d3.select('#chart4')
   .append("svg")
-  .chart("BarChart");
+  .chart("BarChart")
+  .width(500)
+  .height(600);
 
 // render it with some data
 chart.draw(testDataTwoDimension);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 var chart = d3.select('#chart5')
   .append("svg")
@@ -114,7 +192,6 @@ var chart = d3.select('#chart5')
 
 // render it with some data
 chart.draw(testDataTwoDimension3);
-
 
 
 

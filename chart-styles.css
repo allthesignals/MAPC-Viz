@@ -2,11 +2,6 @@ text {
   font: 12px sans-serif;
 }
 
-/*#chart {
-  height:200px;
-  width:200px;
-}*/
-
 .charts {
   height:300px;
   width:400px;
@@ -15,6 +10,7 @@ text {
 body {
   font: 12px sans-serif;
 }
+
 circle:hover {
   cursor: pointer;
 }
