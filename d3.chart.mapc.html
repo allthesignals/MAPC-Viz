@@ -127,6 +127,7 @@ lineChart.fetch({
   var chart = d3.select("#line-graph")
     .append("svg")
     .chart("LineChart")
+    .callouts(["Boston, MA MSA", "Dallas, TX MSA"]);
 
   chart.draw(output);
 
@@ -169,20 +170,6 @@ var chart = d3.select('#chart4')
 
 // render it with some data
 chart.draw(testDataTwoDimension);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
